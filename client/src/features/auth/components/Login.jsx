@@ -37,7 +37,7 @@ function Login() {
               Please login to your account
             </p>
 
-            <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="mt-16">
                 <Label htmlFor="email" className={labelStyle}>
                   Email
