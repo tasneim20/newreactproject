@@ -2,7 +2,7 @@ import { Controller } from "react-hook-form";
 import Loading from "../../../components/Loading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import {
   emailValidation,
   passwordValidation,
@@ -28,10 +28,6 @@ function Login() {
     formState: { errors },
     onSubmit,
   } = useLoginForm();
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <div className="min-h-screen bg-[#E9E9E3]">
@@ -116,8 +112,15 @@ function Login() {
                 </div>
               </div>
 
-              <Button type="submit" className={buttonStyle}>
-                Sign in
+              <Button type="submit" disabled={loading} className={buttonStyle}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}{" "}
               </Button>
             </form>
 
