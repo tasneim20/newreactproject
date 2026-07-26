@@ -2,12 +2,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { login } from "../api/authApi";
 import { toast } from "sonner";
+import { loginSchema } from "../validation/loginSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export function useLoginForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",

@@ -2,10 +2,6 @@ import { Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import {
-  emailValidation,
-  passwordValidation,
-} from "../validation/loginValidation";
 import { useLoginForm } from "../hooks/useLoginForm";
 import { Label } from "@/components/ui/label";
 import {
@@ -41,7 +37,7 @@ function Login() {
               Please login to your account
             </p>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form noValidate onSubmit={handleSubmit(onSubmit)}>
               <div className="mt-16">
                 <Label htmlFor="email" className={labelStyle}>
                   Email
@@ -50,11 +46,10 @@ function Login() {
                 <Controller
                   name="email"
                   control={control}
-                  rules={emailValidation}
                   render={({ field }) => (
                     <Input
                       id="email"
-                      type="email"
+                      type="text"
                       placeholder="Enter your email"
                       {...field}
                       className={inputStyle}
@@ -75,7 +70,6 @@ function Login() {
                 <Controller
                   name="password"
                   control={control}
-                  rules={passwordValidation}
                   render={({ field }) => (
                     <div className="relative w-full">
                       <Input
