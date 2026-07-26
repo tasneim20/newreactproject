@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { login } from "../api/authApi";
 import { toast } from "sonner";
-import { loginSchema } from "../validation/loginSchema";
+import { loginSchema } from "../utils/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export function useLoginForm() {
