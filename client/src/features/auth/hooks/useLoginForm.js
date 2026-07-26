@@ -27,6 +27,10 @@ export function useLoginForm() {
 
       toast.success("Login Successful");
     } catch (error) {
+      console.log("ERROR:", error);
+      console.log("RESPONSE:", error.response);
+      console.log("DATA:", error.response?.data);
+
       toast.error(error.response?.data?.message || "Login Failed");
     } finally {
       setLoading(false);
