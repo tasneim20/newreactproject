@@ -24,6 +24,7 @@ export function useLoginForm() {
 
     try {
       const response = await login(data);
+      console.log(response);
 
       localStorage.setItem("token", response.token);
 
