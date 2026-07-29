@@ -7,7 +7,5 @@ export const login = async (data) => {
     },
   });
 
-  console.log(response); // كامل رد Axios
-  console.log(response.data); // البيانات فقط
   return response.data;
 };

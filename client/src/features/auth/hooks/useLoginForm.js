@@ -24,12 +24,6 @@ export function useLoginForm() {
 
     try {
       const response = await login(data);
-      console.log(response);
-
-      localStorage.setItem("token", response.token);
-
-      const expiry = Date.now() + 60 * 60 * 1000;
-      localStorage.setItem("tokenExpiry", expiry.toString());
 
       toast.success("Login Successful");
       navigate("/buildings");
@@ -37,10 +31,6 @@ export function useLoginForm() {
       toast.error(error.response?.data?.message || "Login Failed");
     } finally {
       setLoading(false);
-    }
-
-    if (Login) {
-      Navigate("/Buldings");
     }
   };
 
