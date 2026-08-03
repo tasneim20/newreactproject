@@ -8,4 +8,8 @@ const api = axios.create({
   },
 });
 
+export const getCurrentUser = async () => {
+  const { data } = await api.get("/auth/me");
+  return data;
+};
 export default api;

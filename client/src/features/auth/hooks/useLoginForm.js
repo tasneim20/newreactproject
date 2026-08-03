@@ -26,7 +26,7 @@ export function useLoginForm() {
       const response = await login(data);
 
       toast.success("Login Successful");
-      navigate("/buildings");
+      navigate("/buildings", { replace: true });
     } catch (error) {
       toast.error(error.response?.data?.message || "Login Failed");
     } finally {
