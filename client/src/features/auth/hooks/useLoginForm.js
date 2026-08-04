@@ -5,12 +5,13 @@ import { toast } from "sonner";
 import { loginSchema } from "../utils/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function useLoginForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
+  const queryClient = useQueryClient();
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -26,6 +27,9 @@ export function useLoginForm() {
       const response = await login(data);
 
       toast.success("Login Successful");
+      await queryClient.invalidateQueries({
+        queryKey: ["currentUser"],
+      });
       navigate("/buildings", { replace: true });
     } catch (error) {
       toast.error(error.response?.data?.message || "Login Failed");

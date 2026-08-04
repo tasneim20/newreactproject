@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
+import RootRedirect from "./RootRedirect";
 
 import Login from "../features/auth/components/Login";
 import Buildings from "../features/buildings/Building";
@@ -7,7 +8,7 @@ import Buildings from "../features/buildings/Building";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/login" replace />,
+    element: <RootRedirect />,
   },
   {
     path: "/login",
@@ -21,5 +22,9 @@ export const router = createBrowserRouter([
         element: <Buildings />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/login" replace />,
   },
 ]);
