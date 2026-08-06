@@ -78,17 +78,13 @@ function Login() {
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
                         className={passwordInputStyle}
-                      />
+                      />{" "}
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#4D6B59]"
                       >
-                        {showPassword ? (
-                          <EyeOff size={22} />
-                        ) : (
-                          <Eye size={22} />
-                        )}
+                        {showPassword ? <EyeOff /> : <Eye />}
                       </button>
                     </div>
                   )}
