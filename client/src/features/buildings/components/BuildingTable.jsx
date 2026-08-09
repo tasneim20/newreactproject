@@ -8,11 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 
 function BuildingTable({ buildings, onEdit }) {
-  const navigate = useNavigate();
-
   return (
     <div className="overflow-hidden rounded-2xl border border-[#EAECF0] bg-white">
       <Table className="w-full border-collapse">
@@ -68,12 +65,7 @@ function BuildingTable({ buildings, onEdit }) {
 
               <TableCell className="px-6 py-5">
                 <div className="flex justify-center gap-4">
-                  <button
-                    className="text-[#3F5E4A] hover:opacity-70"
-                    onClick={() => {
-                      navigate(`/buildings/${building.id}`);
-                    }}
-                  >
+                  <button className="text-[#3F5E4A] hover:opacity-70">
                     <Eye size={16} />
                   </button>
 
