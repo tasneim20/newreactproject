@@ -13,19 +13,22 @@ import {
 } from "@/components/ui/accordion";
 
 import { Button } from "@/components/ui/button";
-
-import useAddBuilding from "../hooks/useAddBuilding";
 import BuildingInformation from "./BuildingInformation";
 import AddressInformation from "./AddressInformation";
+import useUpdateBuilding from "../hooks/useUpdateBuilding";
+import useEditBuilding from "../hooks/useEditBuilding";
 
-function AddBuilding({ open, setOpen }) {
-  const { form, setForm, loading, handleSubmit } = useAddBuilding(setOpen);
+function EditBuilding({ open, setOpen, building }) {
+  const { form, setForm } = useEditBuilding(open, building);
 
+  const { mutate: updateBuilding, isPending } = useUpdateBuilding(setOpen);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-5xl rounded-2xl p-6">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Add Building</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">
+            Update Building
+          </DialogTitle>
         </DialogHeader>
 
         <Accordion
@@ -34,19 +37,19 @@ function AddBuilding({ open, setOpen }) {
           className="space-y-4"
         >
           <AccordionItem value="building" className="rounded-xl border px-5">
-            <AccordionTrigger className="text-lg font-semibold">
-              Building Information
-            </AccordionTrigger>
+            <AccordionTrigger>Building Information</AccordionTrigger>
 
             <AccordionContent>
-              <BuildingInformation form={form} setForm={setForm} />
+              <BuildingInformation
+                form={form}
+                setForm={setForm}
+                isEdit={true}
+              />
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="address" className="rounded-xl border px-5">
-            <AccordionTrigger className="text-lg font-semibold">
-              Address Information
-            </AccordionTrigger>
+            <AccordionTrigger>Address Information</AccordionTrigger>
 
             <AccordionContent>
               <AddressInformation form={form} setForm={setForm} />
@@ -59,8 +62,16 @@ function AddBuilding({ open, setOpen }) {
             Cancel
           </Button>
 
-          <Button onClick={handleSubmit} disabled={loading}>
-            {loading ? "Adding..." : "Add Building"}
+          <Button
+            disabled={isPending}
+            onClick={() =>
+              updateBuilding({
+                id: building.id,
+                data: form,
+              })
+            }
+          >
+            {isPending ? "Updating..." : "Update Building"}
           </Button>
         </div>
       </DialogContent>
@@ -68,4 +79,4 @@ function AddBuilding({ open, setOpen }) {
   );
 }
 
-export default AddBuilding;
+export default EditBuilding;

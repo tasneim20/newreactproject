@@ -1,28 +1,16 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getBuildings } from "../api/buildingApi";
 
 export default function useBuildings() {
-  const [buildings, setBuildings] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchBuildings = async () => {
-    try {
-      const response = await getBuildings();
-      setBuildings(response.content);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchBuildings();
-  }, []);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["buildings"],
+    queryFn: () => getBuildings(),
+    retry: false,
+  });
 
   return {
-    buildings,
-    loading,
-    fetchBuildings,
+    buildings: data?.content ?? [],
+    loading: isLoading,
+    fetchBuildings: refetch,
   };
 }
