@@ -19,7 +19,8 @@ import BuildingInformation from "./BuildingInformation";
 import AddressInformation from "./AddressInformation";
 
 function AddBuilding({ open, setOpen }) {
-  const { form, setForm, loading, handleSubmit } = useAddBuilding(setOpen);
+  const { form, setForm, buildingTypes, loading, handleSubmit } =
+    useAddBuilding(setOpen);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -39,7 +40,11 @@ function AddBuilding({ open, setOpen }) {
             </AccordionTrigger>
 
             <AccordionContent>
-              <BuildingInformation form={form} setForm={setForm} />
+              <BuildingInformation
+                form={form}
+                setForm={setForm}
+                buildingTypes={buildingTypes}
+              />
             </AccordionContent>
           </AccordionItem>
 

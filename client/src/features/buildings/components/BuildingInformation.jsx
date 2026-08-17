@@ -6,11 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { buildingTypes } from "../data/buildingTypes";
 import { fieldClass, labelClass, sectionGridClass } from "../constants/styles";
-
-function BuildingInformation({ form, setForm, isEdit = false }) {
+function BuildingInformation({ form, setForm, buildingTypes = [] }) {
   return (
     <div className={sectionGridClass}>
       <div className="space-y-2">
@@ -20,8 +17,9 @@ function BuildingInformation({ form, setForm, isEdit = false }) {
         </label>
 
         <Select
-          value={String(form.buildingTypeId)}
-          disabled={isEdit}
+          value={
+            form.buildingTypeId === "" ? null : String(form.buildingTypeId)
+          }
           onValueChange={(value) =>
             setForm({
               ...form,

@@ -168,40 +168,38 @@ function AddressInformation({ form, setForm }) {
           }
         />
       </div>
-
       <div className="space-y-2">
         <label className={labelClass}>
-          Latitude
+          Contact Phone Number
           <span className="ml-1 text-red-500">*</span>
         </label>
 
         <Input
           className={fieldClass}
-          type="number"
-          value={form.latitude}
+          type="tel"
+          value={form.contactPhoneNumber}
           onChange={(e) =>
             setForm({
               ...form,
-              latitude: Number(e.target.value),
+              contactPhoneNumber: e.target.value,
             })
           }
         />
       </div>
-
       <div className="space-y-2">
         <label className={labelClass}>
-          Longitude
+          Location URL
           <span className="ml-1 text-red-500">*</span>
         </label>
 
         <Input
           className={fieldClass}
-          type="number"
-          value={form.longitude}
+          type="url"
+          value={form.locationUrl}
           onChange={(e) =>
             setForm({
               ...form,
-              longitude: Number(e.target.value),
+              locationUrl: e.target.value,
             })
           }
         />
