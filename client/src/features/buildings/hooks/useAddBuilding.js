@@ -1,37 +1,17 @@
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createBuilding } from "../api/buildingApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createBuilding, getBuildingTypes } from "../api/buildingApi";
 import { toast } from "sonner";
-
-const initialForm = {
-  buildingTypeId: 1,
-  name: "",
-  number: "",
-  numberOfFloors: 1,
-  directorateId: 1,
-  governorateId: 1,
-  streetName: "",
-  longitude: 35,
-  latitude: 32,
-  village: "",
-  blockNumber: "",
-  neighbourhood: "",
-  plotNumber: "",
-  plotSize: 0,
-  constructionYear: 2025,
-  buildingSize: 0,
-  rentalSize: 0,
-  estimatedRentalPricePerSqm: 0,
-  yearlyConsumption: 100,
-  unrentedPropertyTax: 0,
-  buildingCost: 0,
-  landCost: 0,
-};
+import { initialForm, buildingSchema } from "../schemas/buildingSchema";
 
 export default function useAddBuilding(setOpen) {
   const [form, setForm] = useState(initialForm);
   const queryClient = useQueryClient();
-
+  const { data: buildingTypes = [], isLoading: buildingTypesLoading } =
+    useQuery({
+      queryKey: ["building-types"],
+      queryFn: getBuildingTypes,
+    });
   const { mutate, isPending } = useMutation({
     mutationFn: createBuilding,
 
@@ -40,6 +20,9 @@ export default function useAddBuilding(setOpen) {
 
       queryClient.invalidateQueries({
         queryKey: ["buildings"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["building-types"],
       });
 
       setForm(initialForm);
@@ -52,12 +35,27 @@ export default function useAddBuilding(setOpen) {
   });
 
   const handleSubmit = () => {
-    mutate(form);
+    const result = buildingSchema.safeParse(form);
+
+    console.log("FORM:", form);
+    console.log("VALIDATION:", result);
+
+    if (!result.success) {
+      console.log("ERRORS:", result.error.issues);
+      toast.error(result.error.issues[0].message);
+      return;
+    }
+
+    console.log("VALID FORM:", result.data);
+
+    mutate(result.data);
   };
 
   return {
     form,
     setForm,
+    buildingTypes,
+    buildingTypesLoading,
     loading: isPending,
     handleSubmit,
   };
