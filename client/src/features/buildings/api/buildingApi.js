@@ -26,6 +26,10 @@ export async function getMyClient() {
   const { data } = await api.get("/me/client");
   return data;
 }
+export const getBuildingTypes = async () => {
+  const { data } = await api.get("/building-types/");
+  return data;
+};
 export const getUnits = async (page = 1) => {
   const { data } = await api.get(`/units/?page=${page}`);
   return data;
