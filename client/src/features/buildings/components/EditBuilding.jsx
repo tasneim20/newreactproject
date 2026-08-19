@@ -17,11 +17,16 @@ import BuildingInformation from "./BuildingInformation";
 import AddressInformation from "./AddressInformation";
 import useUpdateBuilding from "../hooks/useUpdateBuilding";
 import useEditBuilding from "../hooks/useEditBuilding";
+import Loading from "@/components/Loading";
 
 function EditBuilding({ open, setOpen, building }) {
-  const { form, setForm } = useEditBuilding(open, building);
-
+  const { form, setForm, isLoading } = useEditBuilding(open, building);
   const { mutate: updateBuilding, isPending } = useUpdateBuilding(setOpen);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-5xl rounded-2xl p-6">

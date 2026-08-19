@@ -1,72 +1,73 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getBuildingById } from "../api/buildingApi";
-
-const initialForm = {
-  buildingTypeId: 1,
-  name: "",
-  number: "",
-  numberOfFloors: 1,
-  directorateId: 1,
-  governorateId: 1,
-  streetName: "",
-  longitude: 35,
-  latitude: 32,
-  village: "",
-  blockNumber: "",
-  neighbourhood: "",
-  plotNumber: "",
-  plotSize: 0,
-  constructionYear: 2025,
-  buildingSize: 0,
-  rentalSize: 0,
-  estimatedRentalPricePerSqm: 0,
-  yearlyConsumption: 100,
-  unrentedPropertyTax: 0,
-  buildingCost: 0,
-  landCost: 0,
-};
+import { initialForm } from "../schemas/buildingSchema";
 
 export default function useEditBuilding(open, building) {
-  const [form, setForm] = useState(initialForm);
+  const [editedForm, setEditedForm] = useState(null);
 
-  const { data, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["building", building?.id],
     queryFn: () => getBuildingById(building.id),
     enabled: open && !!building,
     retry: false,
   });
 
-  useEffect(() => {
-    if (data) {
-      setForm({
-        ...initialForm,
-        buildingTypeId: data.buildingType?.id ?? 1,
-        name: data.name ?? "",
-        number: data.number ?? "",
-        numberOfFloors: data.numberOfFloors ?? 1,
-        directorateId: data.directorate?.id ?? 1,
-        governorateId: data.directorate?.governorate?.id ?? 1,
-        streetName: data.streetName ?? "",
-        longitude: data.longitude ?? 35,
-        latitude: data.latitude ?? 32,
-        village: data.village ?? "",
-        blockNumber: data.blockNumber ?? "",
-        neighbourhood: data.neighbourhood ?? "",
-        plotNumber: data.plotNumber ?? "",
-        plotSize: data.plotSize ?? 0,
-        constructionYear: data.constructionYear ?? 2025,
-        buildingSize: data.buildingSize ?? 0,
-        rentalSize: data.rentalSize ?? 0,
-        estimatedRentalPricePerSqm: data.estimatedRentalPricePerSqm ?? 0,
-        yearlyConsumption: data.yearlyConsumption ?? 100,
-        unrentedPropertyTax: data.unrentedPropertyTax ?? 0,
-        buildingCost: data.buildingCost ?? 0,
-        landCost: data.landCost ?? 0,
-      });
-    }
+  const loadedForm = useMemo(() => {
+    if (!data) return initialForm;
+    const latitude = data.latitude ?? 32;
+    const longitude = data.longitude ?? 35;
+
+    return {
+      ...initialForm,
+
+      // Building Information
+      buildingTypeId: data.buildingType?.id ?? "",
+      name: data.name ?? "",
+      number: data.number ?? "",
+      numberOfFloors: data.numberOfFloors ?? 1,
+      contactPhoneNumber: data.contactPhoneNumber ?? "",
+
+      // Address Information
+      directorateId: data.directorate?.id ?? 1,
+      governorateId: data.directorate?.governorate?.id ?? 1,
+      streetName: data.streetName ?? "",
+      village: data.village ?? "",
+      blockNumber: data.blockNumber ?? "",
+      neighbourhood: data.neighbourhood ?? "",
+      plotNumber: data.plotNumber ?? "",
+
+      // Location
+      latitude,
+      longitude,
+      locationUrl:
+        data.locationUrl ??
+        `https://www.google.com/maps?q=${latitude},${longitude}`,
+
+      // Property Information
+      plotSize: data.plotSize ?? 0,
+      constructionYear: data.constructionYear ?? 2025,
+      buildingSize: data.buildingSize ?? 0,
+      rentalSize: data.rentalSize ?? 0,
+
+      // Financial Information
+      estimatedRentalPricePerSqm: data.estimatedRentalPricePerSqm ?? 0,
+      yearlyConsumption: data.yearlyConsumption ?? 100,
+      unrentedPropertyTax: data.unrentedPropertyTax ?? 0,
+      buildingCost: data.buildingCost ?? 0,
+      landCost: data.landCost ?? 0,
+    };
   }, [data]);
+
+  const setForm = useCallback(
+    (value) => {
+      setEditedForm((current) =>
+        typeof value === "function" ? value(current ?? loadedForm) : value,
+      );
+    },
+    [loadedForm],
+  );
 
   useEffect(() => {
     if (isError) {
@@ -75,7 +76,8 @@ export default function useEditBuilding(open, building) {
   }, [isError, error]);
 
   return {
-    form,
+    form: editedForm ?? loadedForm,
     setForm,
+    isLoading,
   };
 }
