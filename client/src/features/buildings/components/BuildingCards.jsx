@@ -1,6 +1,7 @@
 import { Building2, Eye, Pencil } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-function BuildingCards({ buildings }) {
+function BuildingCards({ buildings, onEdit }) {
   return (
     <div className="space-y-5">
       {buildings.map((building) => (
@@ -51,15 +52,18 @@ function BuildingCards({ buildings }) {
           <hr className="my-6" />
 
           <div className="flex justify-around">
-            <button className="flex items-center gap-2 text-[#4C6A59]">
+            <Button className="flex items-center gap-2 text-[#4C6A59]">
               <Eye size={20} />
               View
-            </button>
+            </Button>
 
-            <button className="flex items-center gap-2 text-[#4C6A59]">
+            <Button
+              className="flex items-center gap-2 text-[#4C6A59]"
+              onClick={() => onEdit(building)}
+            >
               <Pencil size={20} />
               Edit
-            </button>
+            </Button>
           </div>
         </div>
       ))}
